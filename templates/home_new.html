@@ -1,0 +1,38 @@
+{% extends 'base_new.html' %}
+
+{% block content %}
+    <span class="title"><h1>{% block title %} Games {% endblock %}</h1></span>
+    <div class="content">
+        {% for game in games %}
+            <div class="game">
+                <p class="title">
+                    <a href="{{ url_for('game_', game_id=game.id)}}">
+                    {{ game.title }}
+                    </a>
+                </p>
+                <b>
+                    <p class="title">
+                            by {{ game.authors }}
+                    </p>
+                </b>
+                <div class="content">
+                    <!-- description -->
+                    <p>{{ game.description }}</p>
+                </div>
+                <hr>
+                <span id="likes-count-{{game.id}}">{{ game.likes|length }}</span>
+                {% if session["user_id"] in game.likes|map(attribute="author")|list %}
+                <i class="fas fa-thumbs-up" id="like-button-{{game.id}}" onclick="like({{game.id}})"></i>
+                {% else %}
+                <i class="far fa-thumbs-up" id="like-button-{{game.id}}" onclick="like({{game.id}})"></i>
+                {% endif %}
+                <span> | </span>
+                <span>{{ game.comments|length }}</span>
+                <a href="/{{ game.id }}#comments"><i class="far fa-comment-dots"></i></a>
+                <span> | </span>
+                <a class="copy_text" href="/{{ game.id }}"><i class="fas fa-share"></i></a>
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}
